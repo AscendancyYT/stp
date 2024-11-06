@@ -1,0 +1,199 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  /* list-style: none; */
+  text-decoration: none;
+  outline: none;
+}
+
+body {
+  font-family: Arial, sans-serif;
+}
+
+header {
+  background-color: #333;
+  color: #fff;
+  padding: 10px 0;
+  text-align: center;
+}
+
+main {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+section {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 20px;
+}
+
+input[type="text"],
+select {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+button {
+  background-color: #333;
+  color: #fff;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.2s linear;
+}
+
+button:hover {
+  background-color: #555;
+}
+
+main #userForm {
+  width: 500px;
+  height: 350px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 20px;
+  position: relative;
+}
+
+main #userForm h2 {
+  width: 100%;
+  height: 10%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  padding: 30px;
+}
+
+main #userForm input {
+  width: 250px;
+  height: 50px;
+  padding: 20px;
+  border-radius: 10px;
+  border: 1px solid #000;
+}
+
+main #userForm button {
+  width: 250px;
+  height: 50px;
+  border-radius: 10px;
+  transition: all 0.2s linear;
+}
+
+main #strikeForm {
+  width: 500px;
+  height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 20px;
+  position: relative;
+}
+
+main #strikeForm h2 {
+  width: 100%;
+  height: 10%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  padding: 30px;
+}
+
+main #strikeForm input {
+  width: 250px;
+  height: 50px;
+  padding: 20px;
+  border-radius: 10px;
+  border: 1px solid #000;
+}
+
+main #strikeForm button {
+  width: 250px;
+  height: 50px;
+  border-radius: 10px;
+  transition: all 0.2s linear;
+}
+
+main #strikeForm #strikeCount {
+  width: 250px;
+  height: 35px;
+}
+
+main .user-list {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  position: relative;
+  padding: 40px;
+}
+
+main .user-list .content {
+  width: 100%;
+  height: 90%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+main .user-list .content input {
+  width: 80%;
+  height: 50px;
+  padding: 20px;
+  position: absolute;
+  top: 30px;
+  border-radius: 10px;
+  border: 1px solid #000;
+}
+
+main .user-list .content #userList {
+  position: absolute;
+  top: 100px;
+  left: 225px;
+  font-size: 60px;
+}
+
+@media only screen and (max-width: 999px) {
+  main {
+    gap: 20px;
+  }
+}
+
+@media only screen and (max-width: 724px) {
+  main .user-list .content #userList {
+    position: relative;
+    top: 100;
+    left: -500;
+  }
+}
+
+@media only screen and (max-width: 726px) {
+  main .user-list .content #userList {
+    position: relative;
+    top: 100px;
+    left: 40px;
+  }
+}
+
+@media only screen and (max-width: 450px) {
+  main .user-list .content #userList {
+    font-size: 25px;
+    position: relative;
+    top: 100px;
+    left: -40px;
+  }
+}

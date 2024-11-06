@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Strike Policy Application</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>Strike Policy Application</h1>
+  </header>
+  <main>
+    <section id="userForm">
+      <h2>Add User</h2>
+      <input type="text" id="username" placeholder="Username">
+      <button onclick="addUser()">Add Stundent</button>
+    </section>
+    <section id="strikeForm">
+      <h2>Manage Strikes</h2>
+      <input type="text" id="searchUser" placeholder="Search User">
+      <input type="number" name="strikes" id="strikeCount" placeholder="Add percentage">
+      <button onclick="setStrike()">Set Percentage</button>
+    </section>
+    <div class="user-list">
+        <div class="box"><h1>Students</h1></div>
+        <div class="content">
+            <input type="search" name="search" id="searchInput" placeholder="Search Students">
+            <ul id="userList"></ul>
+        </div>
+    </div>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>
