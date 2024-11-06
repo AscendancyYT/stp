@@ -1,111 +1,87 @@
-// Initialize users from local storage
-let users = JSON.parse(localStorage.getItem("users")) || [];
+const addStudentForm = document.getElementById("addStudentForm");
+const studentsContainer = document.getElementById("studentsContainer");
+const searchInput = document.getElementById("searchInput");
 
-// Function to add a new user
-function addUser() {
-  const usernameInput = document.getElementById("username");
-  const username = usernameInput.value.trim();
+let students = JSON.parse(localStorage.getItem('students')) || []; // Load students from localStorage or initialize as an empty array
 
-  if (username !== "") {
-    users.push({ name: username, strikes: 0 });
-    localStorage.setItem("users", JSON.stringify(users));
-    usernameInput.value = "";
+const TELEGRAM_API_URL = `https://api.telegram.org/bot7596278476:AAGnXK45RPs-khDJMPSxUosotIaxU7FRFuQ/sendMessage`;
+const CHANNEL_ID = '-1002434227412'; // Telegram channel ID
+
+addStudentForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const studentName = document.getElementById("studentName").value.trim();
+  const percentage = document.getElementById("percentage").value;
+
+  if (studentName && percentage >= 0 && percentage <= 100) {
+    addStudent(studentName, percentage);
+    addStudentForm.reset();
   }
+});
 
-  window.location.reload();
+function addStudent(name, percentage) {
+  const student = {
+    name,
+    percentage,
+    timestamp: new Date().toISOString(),  // Save the current date and time as a timestamp
+  };
+  students.push(student);  // Add new student to the students array
+  displayStudents(students);  // Display updated list
+  localStorage.setItem('students', JSON.stringify(students));  // Save updated list to localStorage
+  
+  // Send the message to Telegram in Uzbek
+  sendTelegramMessage(student);
 }
 
-// Function to find a user by name
-function findUser(username) {
-  return users.find(
-    (user) => user.name.toLowerCase() === username.toLowerCase()
-  );
+function formatDate(timestamp) {
+  const date = new Date(timestamp);
+  return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
 }
 
-// Function to add a strike to a user
-function setStrike() {
-  const searchUserInput = document.getElementById("searchUser");
-  const strikeCount = parseInt(document.getElementById("strikeCount").value);
-  const username = searchUserInput.value.trim();
-  window.location.reload();
+function displayStudents(studentsList) {
+  studentsContainer.innerHTML = "";  // Clear the list first
 
-  if (username !== "") {
-    const user = findUser(username);
-    if (user) {
-      user.strikes += strikeCount;
-      localStorage.setItem("users", JSON.stringify(users));
-      searchUserInput.value = "";
-    } else {
-      alert("User not found.");
-    }
-  }
-}
+  // Sort the students array by timestamp in descending order (latest first)
+  const sortedStudents = studentsList.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
 
-// Function to remove a strike from a user
-function removeStrike() {
-  const searchUserInput = document.getElementById("searchUser");
-  const strikeCount = parseInt(document.getElementById("strikeCount").value);
-  const username = searchUserInput.value.trim();
-
-  if (username !== "") {
-    const user = findUser(username);
-    if (user) {
-      user.strikes = Math.max(0, user.strikes - strikeCount);
-      localStorage.setItem("users", JSON.stringify(users));
-      searchUserInput.value = "";
-      window.location.reload();
-    } else {
-      alert("User not found.");
-    }
-  }
-}
-
-// Function to remove a user
-function removeUser(username) {
-  users = users.filter(
-    (user) => user.name.toLowerCase() !== username.toLowerCase()
-  );
-  localStorage.setItem("users", JSON.stringify(users));
-}
-
-// user data
-let Users = [
-  { id: 1, name: "" },
-  { id: 2, name: "" },
-  { id: 3, name: "" },
-];
-
-// Function to display user list
-function displayUserList(filteredUsers) {
-  const userListElement = document.getElementById("userList");
-  userListElement.innerHTML = ""; // Clear existing list
-
-  filteredUsers.forEach((user) => {
-    const listItem = document.createElement("li");
-    listItem.textContent = `${user.name}` + ` ` + `${user.strikes}`;
-    userListElement.appendChild(listItem);
+  sortedStudents.forEach((student) => {
+    const studentItem = document.createElement("li");
+    studentItem.classList.add("student-item");
+    studentItem.innerHTML = `
+      <span>${student.name}</span> 
+      <span>${formatDate(student.timestamp)}</span>
+      <span>${student.percentage}%</span>
+    `;
+    studentsContainer.appendChild(studentItem);
   });
 }
 
-// Function to filter user list based on search query
-function filterUsers(searchQuery) {
-  const filteredUsers = Users.filter((user) =>
-    user.name.toLowerCase().includes(searchQuery.toLowerCase())
+searchInput.addEventListener("input", (event) => {
+  const searchTerm = event.target.value.toLowerCase();
+  const filteredStudents = students.filter((student) =>
+    student.name.toLowerCase().includes(searchTerm)
   );
-  displayUserList(filteredUsers);
-}
-
-// Load users from localStorage if available
-const localStorageUsers = localStorage.getItem("users");
-if (localStorageUsers) {
-  Users = JSON.parse(localStorageUsers);
-}
-
-// Call the function to initially display the user list
-displayUserList(Users);
-
-// Event listener for input changes
-const searchInput = document.getElementById("searchInput");
-searchInput.addEventListener("input", function (event) {
-  filterUsers(event.target.value);
+  displayStudents(filteredStudents);
 });
+
+// Function to send message to Telegram
+function sendTelegramMessage(student) {
+  const message = `${student.name} bugun(${formatDate(student.timestamp)}) ${student.percentage}% oldi`;
+
+  const url = `${TELEGRAM_API_URL}?chat_id=${CHANNEL_ID}&text=${encodeURIComponent(message)}`;
+
+  fetch(url)
+    .then(response => response.json())
+    .then(data => {
+      if (data.ok) {
+        console.log("Message sent successfully.");
+      } else {
+        console.error("Failed to send message:", data);
+      }
+    })
+    .catch(error => {
+      console.error("Error sending message:", error);
+    });
+}
+
+// Initialize with students from localStorage
+displayStudents(students);
