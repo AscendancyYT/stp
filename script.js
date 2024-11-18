@@ -11,18 +11,19 @@ addStudentForm.addEventListener("submit", (event) => {
   event.preventDefault();
   const studentName = document.getElementById("studentName").value.trim();
   const percentage = document.getElementById("percentage").value;
+  const date = document.getElementById("date").value;
 
-  if (studentName && percentage >= 0 && percentage <= 100) {
-    addStudent(studentName, percentage);
+  if (studentName && date && percentage >= 0 && percentage <= 100) {
+    addStudent(studentName, percentage, date);
     addStudentForm.reset();
   }
 });
 
-function addStudent(name, percentage) {
+function addStudent(name, percentage, timestamp) {
   const student = {
     name,
     percentage,
-    timestamp: new Date().toISOString(),  // Save the current date and time as a timestamp
+    timestamp
   };
   students.push(student);  // Add new student to the students array
   displayStudents(students);  // Display updated list
@@ -30,11 +31,6 @@ function addStudent(name, percentage) {
   
   // Send the message to Telegram in Uzbek
   sendTelegramMessage(student);
-}
-
-function formatDate(timestamp) {
-  const date = new Date(timestamp);
-  return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
 }
 
 function displayStudents(studentsList) {
@@ -48,7 +44,7 @@ function displayStudents(studentsList) {
     studentItem.classList.add("student-item");
     studentItem.innerHTML = `
       <span>${student.name}</span> 
-      <span>${formatDate(student.timestamp)}</span>
+      <span>${student.timestamp}</span>
       <span>${student.percentage}%</span>
     `;
     studentsContainer.appendChild(studentItem);
@@ -65,7 +61,7 @@ searchInput.addEventListener("input", (event) => {
 
 // Function to send message to Telegram
 function sendTelegramMessage(student) {
-  const message = `${student.name} bugun(${formatDate(student.timestamp)}) ${student.percentage}% oldi`;
+  const message = `${student.name}, ${student.timestamp} kuni ${student.percentage}% oldi`;
 
   const url = `${TELEGRAM_API_URL}?chat_id=${CHANNEL_ID}&text=${encodeURIComponent(message)}`;
 
