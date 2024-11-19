@@ -2,10 +2,10 @@ const addStudentForm = document.getElementById("addStudentForm");
 const studentsContainer = document.getElementById("studentsContainer");
 const searchInput = document.getElementById("searchInput");
 
-let students = JSON.parse(localStorage.getItem('students')) || []; // Load students from localStorage or initialize as an empty array
+let students = JSON.parse(localStorage.getItem('students')) || []; 
 
 const TELEGRAM_API_URL = `https://api.telegram.org/bot7596278476:AAGnXK45RPs-khDJMPSxUosotIaxU7FRFuQ/sendMessage`;
-const CHANNEL_ID = '-1002434227412'; // Telegram channel ID
+const CHANNEL_ID = '-1002434227412';
 
 addStudentForm.addEventListener("submit", (event) => {
   event.preventDefault();
@@ -25,18 +25,16 @@ function addStudent(name, percentage, timestamp) {
     percentage,
     timestamp
   };
-  students.push(student);  // Add new student to the students array
-  displayStudents(students);  // Display updated list
-  localStorage.setItem('students', JSON.stringify(students));  // Save updated list to localStorage
+  students.push(student);
+  displayStudents(students);
+  localStorage.setItem('students', JSON.stringify(students)); 
   
-  // Send the message to Telegram in Uzbek
   sendTelegramMessage(student);
 }
 
 function displayStudents(studentsList) {
-  studentsContainer.innerHTML = "";  // Clear the list first
+  studentsContainer.innerHTML = ""; 
 
-  // Sort the students array by timestamp in descending order (latest first)
   const sortedStudents = studentsList.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
 
   sortedStudents.forEach((student) => {
@@ -59,7 +57,6 @@ searchInput.addEventListener("input", (event) => {
   displayStudents(filteredStudents);
 });
 
-// Function to send message to Telegram
 function sendTelegramMessage(student) {
   const message = `${student.name}, ${student.timestamp} kuni ${student.percentage}% oldi`;
 
@@ -79,5 +76,4 @@ function sendTelegramMessage(student) {
     });
 }
 
-// Initialize with students from localStorage
 displayStudents(students);
